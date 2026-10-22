@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tesla OAuth callback</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; }
+    code, pre { word-break: break-all; background: #f4f4f4; padding: 0.75rem; display: block; border-radius: 8px; }
+    .err { color: #b00020; }
+  </style>
+</head>
+<body>
+  <h1>Tesla authorization</h1>
+  <p id="msg">Reading callback…</p>
+  <pre id="code"></pre>
+  <p>Copy the code above and paste it back to Tesla Bot in chat.</p>
+  <script>
+    const q = new URLSearchParams(location.search);
+    const err = q.get('error');
+    const desc = q.get('error_description');
+    const code = q.get('code');
+    const state = q.get('state');
+    const msg = document.getElementById('msg');
+    const box = document.getElementById('code');
+    if (err) {
+      msg.className = 'err';
+      msg.textContent = 'Authorization failed: ' + err + (desc ? ' — ' + desc : '');
+    } else if (code) {
+      msg.textContent = 'Success. Authorization code (paste this to Tesla Bot):';
+      box.textContent = code;
+      if (state) box.textContent += '\n\nstate=' + state;
+    } else {
+      msg.textContent = 'No code in URL. Open the authorize link from Tesla Bot first.';
+    }
+  </script>
+</body>
+</html>
